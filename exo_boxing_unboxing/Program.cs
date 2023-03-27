@@ -3,7 +3,6 @@ using System.Text;
 
 class Program
 {
-
     //2.Déplacez les quatre premiers chiffres(code de pays et deux chiffres de contrôle) à l'arrière du numéro de compte.
 
     //3.Convertissez les lettres du code de pays en chiffres via le système de l'alphabet romain (<>chiffres romains !!!), où A=10, B=11, C=12. Pour "BE", "B" = 11 et "E" = 14. Vous devriez maintenant avoir une chaîne de chiffres uniquement.
@@ -16,10 +15,9 @@ class Program
     {
         string code_pays_string = string.Empty;
         string country_code_string = "BE";
-        string account_number = "950153408865";
+        string account_number = "363086151703";
         var iban = new StringBuilder();
         long check_digit;
-
 
         for (int i = 0; i < country_code_string.Length; i++)
         {
@@ -36,11 +34,11 @@ class Program
             check_digit = 98 - modulo97;
             if (check_digit < 10)
             {
-                iban.Append(country_code_string + "0" + check_digit + account_number);
+                iban.Append(country_code_string).Append('0').Append(check_digit).Append(account_number);
             }
             else
             {
-                iban.Append(country_code_string + check_digit + account_number);
+                iban.Append(country_code_string).Append(check_digit).Append(account_number);
             }
 
             Console.WriteLine(iban);
@@ -49,24 +47,25 @@ class Program
 
     static void Main(string[] args)
     {
-        
         // EXO 1 ////////////////////////////////////////////////
 
-        Console.WriteLine("Entrez une année : ");
-        Console.WriteLine();
+        Console.Write("Entrez une année : ");
 
         string? annee_string = Console.ReadLine(); ;
-        int.TryParse(annee_string, out int annee_int);
+        bool check = int.TryParse(annee_string, out int annee_int);
 
-        if ((annee_int % 4 == 0) && (annee_int % 100 != 0) || (annee_int % 400 == 0))
+        if (check)
         {
-            Console.WriteLine($"L'année {annee_int} est une année bisextile");
+            if ((annee_int % 4 == 0 && annee_int % 100 != 0) || annee_int % 400 == 0)
+            {
+                Console.WriteLine($"L'année {annee_int} est une année bisextile");
+            }
+            else
+            {
+                Console.WriteLine($"L'année {annee_int} est une année bisextile");
+            }
+            Console.WriteLine();
         }
-        else
-        {
-            Console.WriteLine($"L'année {annee_int} est une année bisextile");
-        }
-
         // EXO 2 ////////////////////////////////////////////////
 
         static int Calculer(int nbr_1, int nbr2)
@@ -83,50 +82,41 @@ class Program
             return 0;
         }
 
-        int nombreA = 5;
-        int nombreB = 2;
+        const int NOMBRE_A = 5;
+        const int NOMBRE_B = 2;
 
-        Calculer(nombreA, nombreB);
+        Calculer(NOMBRE_A, NOMBRE_B);
+        Console.WriteLine();
 
         //EXO 3 ////////////////////////////////////////////////
 
-        long bban = 734061189800;
-        long last_10_Digit_Long = bban / 100;
+        const long BBAN = 734061189897;
+        const long LAST_10_DIGIT_LONG = BBAN / 100;
 
-        long modulo = (last_10_Digit_Long % 97);
-        string first_10_Digit_String = bban.ToString();
+        const long MODULO = (LAST_10_DIGIT_LONG % 97);
+        string first_10_Digit_String = BBAN.ToString();
 
-        int startIndex = 10;
-        int lastIndex = first_10_Digit_String.Length - 10;
+        string last_2_digit_string = first_10_Digit_String[10..];
+        check = int.TryParse(last_2_digit_string, out int last_2_digit_int);
 
-        string last_2_digit_string = first_10_Digit_String.Substring(startIndex, lastIndex);
-        bool check = int.TryParse(last_2_digit_string, out int last_2_digit_int);
-
-        if (check)
+        if (check && MODULO == BBAN % 100)
         {
-
-            if (modulo == bban % 100)
-            {
-                Console.WriteLine("OK");
-            }
-            else if (last_2_digit_int == 0)
-            {
-                Console.WriteLine("Le BBAN termine par 97");
-            }
-            else
-
-            {
-                Console.WriteLine("NOK");
-            }
+            Console.WriteLine("OK");
+            Console.WriteLine();
+        }
+        else if (last_2_digit_int == 0)
+        {
+            Console.WriteLine("Le BBAN termine par 97");
+            Console.WriteLine();
         }
         else
         {
-            Console.WriteLine("Une erreur s'est produite.");
+            Console.WriteLine("NOK");
+            Console.WriteLine();
         }
 
         // EXO 4 ////////////////////////////////////////////////
 
-        Generate_Iban_From_Bban(); 
-
+        Generate_Iban_From_Bban();
     }
 }
